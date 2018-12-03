@@ -17,6 +17,9 @@ spark = SparkSession.builder.getOrCreate()
 # sales = spark.sql('select * from sales')
 sales = spark.read.parquet('sales')
 
+import pickle
+with open('models.pickle', 'rb') as handle:
+    models = pickle.load(handle)
 
 import sys
 
