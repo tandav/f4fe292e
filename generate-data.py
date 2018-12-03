@@ -1,5 +1,3 @@
-# Databricks notebook source
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pyspark.sql.types import *
@@ -12,7 +10,7 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 # ======================================================================
 
-from random import random
+from random import random, expovariate
 from math import sin, cos
 
 def random_time_series(date, amp, phase):
@@ -31,16 +29,13 @@ items = [0, 1, 2, 3]
 
 # ======================================================================
 
-sales_amp_phase = pd.DataFrame(
-    columns = ['amp', 'phase'],
-    index=pd.MultiIndex.from_product([shops, items], names=['shop', 'item'])
-)
-
+sales_amp_phase = {}
 for shop in shops:
     for item in items:
-        sales_amp_phase.loc[shop, item]['amp'] = np.random.exponential(scale=10)
-        sales_amp_phase.loc[shop, item]['phase'] = np.random.random() * 40
-sales_amp_phase
+        sales_amp_phase[(shop, item, 'amp')]   = expovariate(10)
+        sales_amp_phase[(shop, item, 'phase')] = random() * 40
+
+
 
 # ======================================================================
 
