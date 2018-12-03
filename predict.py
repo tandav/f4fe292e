@@ -14,6 +14,10 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 
 
+
+n_partitions = 15 # adjust it manually, it should be >= than n_shops * n_items
+
+
 # sales = spark.sql('select * from sales')
 sales = spark.read.parquet('sales')
 features = spark.read.parquet('features')
@@ -23,6 +27,8 @@ with open('models.pickle', 'rb') as handle:
     models = pickle.load(handle)
 
 import sys
+
+
 
 
 if len(sys.argv) < 3:
