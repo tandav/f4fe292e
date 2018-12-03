@@ -1,43 +1,41 @@
-import pandas as pd
+# import pandas as pd
 import numpy as np
-from pyspark.sql.types import *
+# from pyspark.sql.types import *
 import datetime
 from pyspark.sql import Window
 from pyspark.sql import functions as F
 from pyspark.ml.feature import VectorAssembler
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, mean_squared_error
 import sys
 
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 
 
-# sales = spark.sql('select * from sales')
-
+# train_data = spark.sql('select * from sales')
 train_table = sys.argv[1]
-sales = spark.read.parquet(train_table)
+train_data = spark.read.parquet(train_table)
 
 
 
 # days = 10
 # days = 1056
-days = 256
+# days = 256
 
 
-date_range = pd.date_range(start='2015-03-01', periods=days, freq='D')
-split_date_pandas = date_range[-56]
-split_date = datetime.date(
-    year  = split_date_pandas.year,
-    month = split_date_pandas.month,
-    day   = split_date_pandas.day
-)
-split_date2_pandas = date_range[-28]
-split_date2 = datetime.date(
-    year  = split_date2_pandas.year,
-    month = split_date2_pandas.month,
-    day   = split_date2_pandas.day
-)
+# date_range = pd.date_range(start='2015-03-01', periods=days, freq='D')
+# split_date_pandas = date_range[-56]
+# split_date = datetime.date(
+#     year  = split_date_pandas.year,
+#     month = split_date_pandas.month,
+#     day   = split_date_pandas.day
+# )
+# split_date2_pandas = date_range[-28]
+# split_date2 = datetime.date(
+#     year  = split_date2_pandas.year,
+#     month = split_date2_pandas.month,
+#     day   = split_date2_pandas.day
+# )
 
 
 # ======================================================================
@@ -73,6 +71,7 @@ def make_features(df):
             .withColumn(str(d) + '_day_lag' , F.lag('sale', d).over(lag_win))
     lag_win = Window.partitionBy('shop', 'item').orderBy('date')
     features = features.withColumn('target', F.lag('sale', -28).over(lag_win)) # target is 28 day in the future
+    features = features.filter(features.target.isNotNull()) # delete last 28 days from train data (target is undefined)
     # features.show()
     
     days = lambda i: i * 86400 
@@ -85,7 +84,7 @@ def make_features(df):
         # https://stackoverflow.com/a/33226511/4204843
         # lag_win = Window.partitionBy('shop', 'item').orderBy('date').rangeBetween(-days(1), 0)
         lag_win = Window.partitionBy('shop', 'item').orderBy(F.col('date').cast('timestamp').cast('long')).rangeBetween(-days(d), 0)
-        features = features                                                 \
+        features = features                                                               \
             .withColumn(str(d) + '_day_rolling_sum'  , F.sum      ('sale').over(lag_win)) \
             .withColumn(str(d) + '_day_rolling_mean' , F.mean     ('sale').over(lag_win)) \
             .withColumn(str(d) + '_day_rolling_min'  , F.min      ('sale').over(lag_win)) \
@@ -133,12 +132,11 @@ def make_features(df):
     ).transform(features) # add column 'features'
     features.show()
 
-    return features, feature_columns
+    return features
 
 # ======================================================================
 
-features, feature_columns = make_features(sales)
-features_train = features.filter(sales['date'] < split_date)
+features_train = make_features(train_data)
 
 # ======================================================================
 
@@ -156,6 +154,4 @@ print(models)
 import pickle
 with open('models.pickle', 'wb') as handle:
     pickle.dump(models, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-# features.write.save('features', format='parquet', mode='overwrite')
 
