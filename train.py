@@ -155,3 +155,7 @@ print(models)
 import pickle
 with open('models.pickle', 'wb') as handle:
     pickle.dump(models, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+features.write.save('features', format='parquet', mode='overwrite')
+

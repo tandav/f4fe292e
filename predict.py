@@ -16,6 +16,7 @@ spark = SparkSession.builder.getOrCreate()
 
 # sales = spark.sql('select * from sales')
 sales = spark.read.parquet('sales')
+features = spark.read.parquet('features')
 
 import pickle
 with open('models.pickle', 'rb') as handle:
