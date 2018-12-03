@@ -70,8 +70,8 @@ for key, p in pred_true:
     mae = mean_absolute_error(p['sales_pred'], p['sales_true'])
     mse = mean_squared_error (p['sales_pred'], p['sales_true'])
     print(key, 'MAE:', mae, 'MSE:', mse)
-    mae_sum += mae
-    mse_sum += mse
+    mae_mean += mae
+    mse_mean += mse
     n += 1
 
 mae_mean /= n
