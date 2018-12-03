@@ -6,29 +6,19 @@ from pyspark.sql.types import *
 import datetime
 from pyspark.sql import Window
 from pyspark.sql import functions as F
-from pyspark.ml.feature import VectorAssembler
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-
-# ======================================================================
-
 from pyspark.sql import SparkSession
-spark = SparkSession.builder.getOrCreate()
-
-
-
-n_partitions = 15 # adjust it manually, it should be >= than n_shops * n_items
-
-
 
 # ======================================================================
+spark = SparkSession.builder.getOrCreate()
+# ======================================================================
 
-def random_time_series(t, amp, phase):
-    return int(np.round(
-        amp * np.abs(
-            np.sin(t - phase) + np.cos(t**3) + np.random.random()
-        )
-    ))
+from random import random
+from math import sin, cos
+
+def random_time_series(date, amp, phase):
+    base = datetime.date(year=2000, month=1, day=1)
+    t = (date - base).days
+    return int(round(amp * abs(sin(t - phase) + cos(t**3))) + random())
 
 # ======================================================================
 
@@ -66,38 +56,24 @@ sales_data = []
 # days = 1056
 days = 256
 
-date_range = pd.date_range(start='2015-03-01', periods=days, freq='D')
-t_range = np.linspace(0, 50, days)
+start = datetime.date(year=2015, month=3, day=1)
+date_range = [start + datetime.timedelta(days=x) for x in range(days)]
 
-for timestamp, t in zip(date_range, t_range):
+
+for date in date_range:
     for shop in shops:
         for item in items:
             amp   = sales_amp_phase.loc[shop, item]['amp']
             phase = sales_amp_phase.loc[shop, item]['phase']
-            sale  = random_time_series(t, amp, phase)
-            date = datetime.date(
-                year  = timestamp.year,
-                month = timestamp.month,
-                day   = timestamp.day
-            )
+            sale  = random_time_series(date, amp, phase)
             # if sale > 0:
             #     sales_data.append([date, shop, item, sale])
             sales_data.append([date, shop, item, sale])
 
 
-split_date_pandas = date_range[-56]
-split_date = datetime.date(
-    year  = split_date_pandas.year,
-    month = split_date_pandas.month,
-    day   = split_date_pandas.day
-)
+split_date  = date_range[-56]
+split_date2 = date_range[-28]
 
-split_date2_pandas = date_range[-28]
-split_date2 = datetime.date(
-    year  = split_date2_pandas.year,
-    month = split_date2_pandas.month,
-    day   = split_date2_pandas.day
-)
 sales = spark.createDataFrame(data = sales_data, schema = schema)
 sales.write.save('sales', format='parquet', mode='overwrite')
 # sales.write.saveAsTable('sales', mode='overwrite')
