@@ -58,8 +58,8 @@ date_range = [start + datetime.timedelta(days=x) for x in range(days)]
 for date in date_range:
     for shop in shops:
         for item in items:
-            amp   = sales_amp_phase.loc[shop, item]['amp']
-            phase = sales_amp_phase.loc[shop, item]['phase']
+            amp   = sales_amp_phase[(shop, item, 'amp')]
+            phase = sales_amp_phase[(shop, item, 'phase')]
             sale  = random_time_series(date, amp, phase)
             # if sale > 0:
             #     sales_data.append([date, shop, item, sale])
