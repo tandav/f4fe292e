@@ -101,3 +101,4 @@ split_date2 = datetime.date(
 sales = spark.createDataFrame(data = sales_data, schema = schema)
 sales.write.save('sales', format='parquet', mode='overwrite')
 # sales.write.saveAsTable('sales', mode='overwrite')
+

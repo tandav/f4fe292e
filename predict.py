@@ -35,6 +35,9 @@ key = (shop, item)
 
 print(key)
 
+# days = 10
+# days = 1056
+days = 256
 
 date_range = pd.date_range(start='2015-03-01', periods=days, freq='D')
 split_date_pandas = date_range[-56]
