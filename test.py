@@ -1,45 +1,18 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from pyspark.sql.types import *
 import datetime
-from pyspark.sql import Window
 from pyspark.sql import functions as F
-from pyspark.ml.feature import VectorAssembler
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-
-
 from pyspark.sql import SparkSession
+
 spark = SparkSession.builder.getOrCreate()
-
-
-# sales = spark.sql('select * from sales')
 features = spark.read.parquet('features')
 
 import pickle
 with open('models.pickle', 'rb') as handle:
     models = pickle.load(handle)
 
-import sys
-
-
-
-if len(sys.argv) < 3:
-    print('pass shop and item:')
-    print('spark-submit predict.py 1 2')
-    print('(shop=1 and item=2)')
-    sys.exit(1)
-
-shop = int(sys.argv[1])
-item = int(sys.argv[2])
-
-key = (shop, item)
-
-if key not in models:
-    print('(shop, item) not in models list')
-
-# key = (0, 2) # (shop, item)
 
 print(key)
 
@@ -68,82 +41,48 @@ features_test = features.filter((F.col('date') >= split_date) & (F.col('date') <
 # ======================================================================
 
 
-
 models_broadcasted = spark.sparkContext.broadcast(models)
 
-def predict(group_iterator):
-    X = []
-    dates = []
+def test(group_iterator):
+    features   = []
+    sales_pred = []
+    sales_true = []
+
+    first = True
     for row in group_iterator:
-        X.append(row.features.toArray())
-        dates.append(row.date)
-    pr = models_broadcasted.value[key].predict(X)
-    return (key, (pr, dates))
+            if first:
+                key = (row.shop, row.item)
+                first = False
+        features.append(row.features.toArray())
+        sales_true.append(row.target)
+    sales_pred = models_broadcasted.value[key].predict(X)
+    sales_true = np.array(sales_true)
+    return {'sales_pred': sales_pred, 'sales_true': sales_true}
 
-preds = features_test.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(predict).collect()
-# print(preds)
+pred_true = features_test.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(test).collect()
 
-
-
-
-
-# ======================================================================
-
-def y_true(row_iterator):
-    y_true = []
-    dates = []
-     
-    for i, row in enumerate(row_iterator):
-        if i == 0:
-            key = (row.shop, row.item)
-        y_true.append(row.target)
-        dates.append(row.date)
-    if len(y_true) > 0:
-        yield (key, (np.array(y_true), dates))
-
-y_trueZ = dict(features_test.repartition(n_partitions, 'shop', 'item').rdd.mapPartitions(y_true).collect())
-preds = features_test.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(predict).collect()
-
-# print(y_trueZ)
-
-# ======================================================================
-
-
+print('======================================================================')
 print('\n'*10)
 
+mae_mean = 0
+mse_mean = 0
+n = 0
 
-a = preds[key][0]
-b = y_trueZ[key][0]
+for key, p in pred_true:
+    mae = mean_absolute_error(p['sales_pred'], p['sales_true'])
+    mse = mean_squared_error (p['sales_pred'], p['sales_true'])
+    print(key, 'MAE:', mae, 'MSE:', mse)
+    mae_sum += mae
+    mse_sum += mse
+    n += 1
 
-print
-print('============================== predicted: ==============================')
-print(a)
-print('================================ true: =================================')
-print(b)
-
-
-mae = mean_absolute_error(a, b)
-mse = mean_squared_error(a, b)
+mae_mean /= n
+mse_mean /= n
 print('======================================================================')
-print('MAE:', mae)
-print('MSE:', mse)
-
-
+print(key, 'MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
 
 print('\n'*10)
 print('======================================================================')
 
 
-plt.figure(figsize=(20, 4))
-plt.plot(a, label='predict')
-plt.plot(b, label='true')
-plt.legend()
-plt.xticks(np.arange(len(a)))
-
-
-plt.title('MAE: {mae:.3f}       MSE: {mse:.3f}'.format(mae=mae, mse=mse))
-plt.grid()
-# display(plt.gcf())
-# plt.show()
-plt.savefig('prediction.png')
 
