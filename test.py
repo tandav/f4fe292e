@@ -79,7 +79,7 @@ for key, p in pred_true:
 mae_mean /= n
 mse_mean /= n
 print('======================================================================')
-print(key, 'MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
+print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
 
 print('\n'*10)
 print('======================================================================')
