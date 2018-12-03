@@ -53,7 +53,7 @@ def test(group_iterator):
             first = False
         features.append(row.features.toArray())
         sales_true.append(row.target)
-    sales_pred = models_broadcasted.value[key].predict(X)
+    sales_pred = models_broadcasted.value[key].predict(features)
     sales_true = np.array(sales_true)
     return {'sales_pred': sales_pred, 'sales_true': sales_true}
 
