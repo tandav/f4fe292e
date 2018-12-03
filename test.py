@@ -50,9 +50,9 @@ def test(group_iterator):
 
     first = True
     for row in group_iterator:
-            if first:
-                key = (row.shop, row.item)
-                first = False
+        if first:
+            key = (row.shop, row.item)
+            first = False
         features.append(row.features.toArray())
         sales_true.append(row.target)
     sales_pred = models_broadcasted.value[key].predict(X)
