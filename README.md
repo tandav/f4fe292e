@@ -21,8 +21,20 @@ spark-submit predict.py sales
 
 результаты сохраняются в таблицу `sales_prediction`
 
+
+---
+
+просмотреть результаты предсказания для таблицы sales
+
+```sh
+spark-submit print-prediction.py sales                   # all results
+spark-submit print-prediction.py sales --shop=1 --item=2 # results for shop 1 and item 2
+spark-submit print-prediction.py sales --shop=0          # results for shop 0
+spark-submit print-prediction.py sales --item=2          # results for item 2
+```
+
 посмотреть предсказания для пары `(shop, item)`
-посмотреть предсказания для `shop`
+посмотреть предсказания для `shop`  
 посмотреть предсказания для `item`
 
 (чисто селекты в `sales_prediction`)
