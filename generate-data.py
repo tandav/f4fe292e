@@ -1,9 +1,5 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from pyspark.sql.types import *
 import datetime
-from pyspark.sql import Window
-from pyspark.sql import functions as F
 from pyspark.sql import SparkSession
 
 # ======================================================================
@@ -34,8 +30,6 @@ for shop in shops:
     for item in items:
         sales_amp_phase[(shop, item, 'amp')]   = expovariate(10)
         sales_amp_phase[(shop, item, 'phase')] = random() * 40
-
-
 
 # ======================================================================
 
