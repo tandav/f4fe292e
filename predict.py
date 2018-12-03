@@ -89,7 +89,7 @@ def predict(row_iterator):
             yield (key, (None, None))
 
 preds = dict(features_test.repartition(n_partitions, 'shop', 'item').rdd.mapPartitions(predict).collect())
-print(preds)
+# print(preds)
 
 # ======================================================================
 
@@ -106,7 +106,7 @@ def y_true(row_iterator):
         yield (key, (np.array(y_true), dates))
 
 y_trueZ = dict(features_test.repartition(n_partitions, 'shop', 'item').rdd.mapPartitions(y_true).collect())
-print(y_trueZ)
+# print(y_trueZ)
 
 # ======================================================================
 
@@ -116,6 +116,9 @@ print(y_trueZ)
 
 a = preds[key][0]
 b = y_trueZ[key][0]
+
+print(a)
+print(b)
 
 mae = mean_absolute_error(a, b)
 mse = mean_squared_error(a, b)
