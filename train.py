@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from pyspark.sql.types import *
 import datetime
 from pyspark.sql import Window
@@ -8,14 +7,16 @@ from pyspark.sql import functions as F
 from pyspark.ml.feature import VectorAssembler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-
+import sys
 
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 
 
 # sales = spark.sql('select * from sales')
-sales = spark.read.parquet('sales')
+
+train_table = sys.argv[1]
+sales = spark.read.parquet(train_table)
 
 
 
@@ -156,5 +157,5 @@ import pickle
 with open('models.pickle', 'wb') as handle:
     pickle.dump(models, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-features.write.save('features', format='parquet', mode='overwrite')
+# features.write.save('features', format='parquet', mode='overwrite')
 
