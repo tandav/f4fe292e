@@ -19,15 +19,6 @@ sales = spark.read.parquet('sales')
 
 
 
-
-
-
-
-
-n_partitions = 15 # adjust it manually, it should be >= than n_shops * n_items
-
-
-
 # days = 10
 # days = 1056
 days = 256
@@ -104,18 +95,37 @@ def make_features(df):
             .withColumn(str(d) + '_day_rolling_kurt' , F.kurtosis ('sale').over(lag_win))
     features.show()
     
+
+
     feature_columns = []
     for col in features.columns:
         if col not in ('date', 'shop', 'item', 'sale', 'target'):
-            print(col)
-            mean = features.agg({col: 'mean'}).first()[0]
-            if mean is None:
-                mean = 0. # dirty fix
-            print(mean, type(mean))
-            features = features.fillna(mean, subset=col)
             feature_columns.append(col)
     print(feature_columns)
 
+    # feature_columns = []
+    # for col in features.columns:
+    #     if col not in ('date', 'shop', 'item', 'sale', 'target'):
+    #         print(col)
+    #         mean = features.agg({col: 'mean'}).first()[0]
+    #         if mean is None:
+    #             mean = 0. # dirty fix
+    #         print(mean, type(mean))
+    #         features = features.fillna(mean, subset=col)
+    #         feature_columns.append(col)
+    # print(feature_columns)
+
+    sql_query = ['date', 'shop', 'item', 'sale', 'target']
+
+
+    # replace null and NaN 
+    sql_query += [
+        F.when( F.isnan(features[c]) | F.isnull(features[c]), 1).otherwise(features[c]).alias(c)
+        for c in feature_columns
+    ]
+    
+    features = features.select(sql_query)
+    
     features = VectorAssembler(
         inputCols = feature_columns, 
         outputCol = 'features'
@@ -131,31 +141,20 @@ features_train = features.filter(sales['date'] < split_date)
 
 # ======================================================================
 
-from pyspark.ml.linalg import DenseVector 
 
-def fit(row_iterator):
-    X = []
-    y = []
-    
-    for i, row in enumerate(row_iterator):
-        if i == 0:
-            key = (row.shop, row.item)
-        x = row.features.toArray() # may contain nan
-        x[np.isnan(x)] = 0
-        X.append(x)
+def fit(group_iterator):
+    X, y  = [], []
+    for row in group_iterator:
+        X.append(row.features.toArray())
         y.append(row.target)
-    
-    if len(X) > 0:
-        lr = LinearRegression().fit(X, y)
-        yield (key, lr)
+    return LinearRegression().fit(X, y)
 
-models = dict(features_train.repartition(n_partitions, 'shop', 'item').rdd.mapPartitions(fit).collect())
+models = features_train.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(fit).collect()
 print(models)
 
 import pickle
 with open('models.pickle', 'wb') as handle:
     pickle.dump(models, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
 
 features.write.save('features', format='parquet', mode='overwrite')
 
