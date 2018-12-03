@@ -111,7 +111,7 @@ y_trueZ = dict(features_test.repartition(n_partitions, 'shop', 'item').rdd.mapPa
 # ======================================================================
 
 
-
+print('\n'*10)
 
 
 a = preds[key][0]
@@ -126,9 +126,14 @@ print(b)
 
 mae = mean_absolute_error(a, b)
 mse = mean_squared_error(a, b)
-print('\n\n\n======================================================================')
+print('======================================================================')
 print('MAE:', mae)
 print('MSE:', mse)
+
+
+
+print('\n'*10)
+print('======================================================================')
 
 
 plt.figure(figsize=(20, 4))
@@ -143,3 +148,4 @@ plt.grid()
 # display(plt.gcf())
 # plt.show()
 plt.savefig('prediction.png')
+
