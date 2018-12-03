@@ -14,8 +14,6 @@ with open('models.pickle', 'rb') as handle:
     models = pickle.load(handle)
 
 
-print(key)
-
 # days = 10
 # days = 1056
 days = 256
