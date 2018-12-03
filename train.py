@@ -149,7 +149,7 @@ def fit(group_iterator):
         y.append(row.target)
     return LinearRegression().fit(X, y)
 
-models = features_train.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(fit).collect()
+models = dict(features_train.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(fit).collect())
 print(models)
 
 import pickle

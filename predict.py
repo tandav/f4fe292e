@@ -9,7 +9,7 @@ def predict_by_key(key):
     if key in models:
         return models[key].predict(X)
     else:
-        return str(key) + 'not in models list'
+        return str(key) + ' not in models list'
 
 if len(sys.argv) == 2:   # from file
     with open(sys.argv[1]) as f:
