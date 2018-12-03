@@ -24,19 +24,20 @@ items = [0, 1, 2, 3]
 # ======================================================================
 
 # fixed
-sales_amp_phase = {
-    (0, 0, 'amp'): 0.150, (0, 0, 'phase'): 7.8586,
-    (0, 1, 'amp'): 0.076, (0, 1, 'phase'): 18.153,
-    (0, 2, 'amp'): 0.006, (0, 2, 'phase'): 30.449,
-    (0, 3, 'amp'): 0.076, (0, 3, 'phase'): 37.141,
-    (1, 0, 'amp'): 0.016, (1, 0, 'phase'): 29.471,
-    (1, 1, 'amp'): 0.082, (1, 1, 'phase'): 31.124,
-    (1, 2, 'amp'): 0.053, (1, 2, 'phase'): 16.408,
-    (1, 3, 'amp'): 0.153, (1, 3, 'phase'): 15.013,
-    (2, 0, 'amp'): 0.148, (2, 0, 'phase'): 1.0655,
-    (2, 1, 'amp'): 0.099, (2, 1, 'phase'): 7.2022,
-    (2, 2, 'amp'): 0.063, (2, 2, 'phase'): 35.497,
-    (2, 3, 'amp'): 0.048, (2, 3, 'phase'): 32.801
+
+sales_amp_phase =  {
+    (0, 0, 'amp'): 3.778, (0, 0, 'phase'): 36.00,
+    (0, 1, 'amp'): 17.76, (0, 1, 'phase'): 20.07,
+    (0, 2, 'amp'): 17.36, (0, 2, 'phase'): 2.840,
+    (0, 3, 'amp'): 10.25, (0, 3, 'phase'): 35.65,
+    (1, 0, 'amp'): 15.36, (1, 0, 'phase'): 1.160,
+    (1, 1, 'amp'): 0.189, (1, 1, 'phase'): 35.79,
+    (1, 2, 'amp'): 17.35, (1, 2, 'phase'): 32.29,
+    (1, 3, 'amp'): 1.904, (1, 3, 'phase'): 34.64,
+    (2, 0, 'amp'): 2.008, (2, 0, 'phase'): 33.55,
+    (2, 1, 'amp'): 4.186, (2, 1, 'phase'): 19.75,
+    (2, 2, 'amp'): 19.36, (2, 2, 'phase'): 7.907,
+    (2, 3, 'amp'): 17.10, (2, 3, 'phase'): 33.62,
 }
 
 # or generate new one:
@@ -56,15 +57,13 @@ schema = StructType([
     StructField(name = 'sale', dataType = IntegerType(), nullable=False),
 ])
 
-sales_data = []
-
 
 start = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d').date()
 # start = datetime.date(year=2015, month=3, day=1)
 days = int(sys.argv[2])
-
-
 date_range = [start + datetime.timedelta(days=x) for x in range(days)]
+
+sales_data = []
 
 
 for date in date_range:
@@ -77,12 +76,7 @@ for date in date_range:
             #     sales_data.append([date, shop, item, sale])
             sales_data.append([date, shop, item, sale])
 
-
-split_date  = date_range[-56]
-split_date2 = date_range[-28]
-
 sales = spark.createDataFrame(data = sales_data, schema = schema)
-
 table_name = sys.argv[3]
 sales.write.save(table_name, format='parquet', mode='overwrite')
 # sales.write.saveAsTable('sales', mode='overwrite')
