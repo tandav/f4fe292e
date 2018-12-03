@@ -117,8 +117,12 @@ y_trueZ = dict(features_test.repartition(n_partitions, 'shop', 'item').rdd.mapPa
 a = preds[key][0]
 b = y_trueZ[key][0]
 
+print
+print('============================== predicted: ==============================')
 print(a)
+print('================================ true: =================================')
 print(b)
+
 
 mae = mean_absolute_error(a, b)
 mse = mean_squared_error(a, b)
