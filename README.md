@@ -20,5 +20,7 @@ spark-submit predict.py 1 2
 spark-submit predict.py to_predict.txt
 ```
 
-передаваемый файл должен иметь [такую](to_predict.txt) структуру. Первая колонка `shop`, вторая `item`
+передаваемый файл должен иметь [такую](to_predict.txt) структуру.  
+Первая колонка `shop`, вторая `item`  
+название файла не важно
 
