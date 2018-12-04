@@ -46,13 +46,11 @@ for row in result.collect():
             report += str(p).rjust(3) + ' '
         report += 'week sum: ' + str(sum(week_pred_round)) + '\n'
     report += '\n'
-    # rounded = [round(p) for p in row.prediction]
-    # rounded_str = []
-    # print(row.shop, row.item, end=' ')
-    # for p in row.prediction:
-        # print('{r:3}'.format(r=round(p)), end=' ')
-    # print()
 report += '\n'*5
 report += '='*72
 
-print(report)
+def gprint(*args):
+    print('\033[32;1m', end='') # GREEN
+    print(*args, end='\033[0m\n')
+
+gprint(report)
