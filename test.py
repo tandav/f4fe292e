@@ -28,13 +28,45 @@ pred = spark.read.parquet(pred_table)
 true = spark.read.parquet(true_table)
 true = add_target(add_missing(true))
 
-pred_c = pred.collect()
-true_c = pred.collect()
+mae_mean = 0
+mse_mean = 0
+n = 0
 
-for p, t in zip(pred_c, true_c):
-    gprint(p)
-    gprint(t)
-    print()
+for p, t in zip(pred.collect(), true.collect()):
+    # print(p)
+    # print(t)
+    mae = mean_absolute_error(p['sales_pred'], p['sales_true'])
+    mse = mean_squared_error (p['sales_pred'], p['sales_true'])
+    print(key, 'MAE:', mae, 'MSE:', mse)
+    mae_mean += mae
+    mse_mean += mse
+    n += 1
+
+mae_mean /= n
+mse_mean /= n
+
+
+
+print('======================================================================')
+print('\n'*10)
+
+
+
+# for key, p in pred_true:
+
+
+
+
+print('======================================================================')
+print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
+
+print('\n'*10)
+print('======================================================================')
+
+
+
+
+
 
 # # ======================================================================
 
@@ -61,29 +93,4 @@ for p, t in zip(pred_c, true_c):
 #     return {'sales_pred': sales_pred, 'sales_true': sales_true}
 
 # pred_true = features_test.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(test).collect()
-
-# print('======================================================================')
-# print('\n'*10)
-
-# mae_mean = 0
-# mse_mean = 0
-# n = 0
-
-# for key, p in pred_true:
-#     mae = mean_absolute_error(p['sales_pred'], p['sales_true'])
-#     mse = mean_squared_error (p['sales_pred'], p['sales_true'])
-#     print(key, 'MAE:', mae, 'MSE:', mse)
-#     mae_mean += mae
-#     mse_mean += mse
-#     n += 1
-
-# mae_mean /= n
-# mse_mean /= n
-# print('======================================================================')
-# print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
-
-# print('\n'*10)
-# print('======================================================================')
-
-
 
