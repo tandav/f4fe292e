@@ -46,4 +46,4 @@ prediction = train_data_features_target      \
     .map(lambda x: (x[0][0], x[0][1], x[1])) \
     .toDF(schema)
 
-prediction.write.save(table_name + '_prediction', format='parquet', mode='overwrite')
+prediction.write.save(train_table + '_prediction', format='parquet', mode='overwrite')

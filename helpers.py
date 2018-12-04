@@ -16,11 +16,9 @@ def make_features(df):
         StructField(name = 'sale', dataType = IntegerType(), nullable=False),
     ])
 
-
     dates_unique = df.rdd.map(lambda x: x.date).distinct()
     shops_unique = df.rdd.map(lambda x: x.shop).distinct()
     items_unique = df.rdd.map(lambda x: x.item).distinct()
-
 
     df_keyed = df.rdd.map(lambda x: ((x.date, x.shop, x.item), x.sale))
 
