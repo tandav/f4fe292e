@@ -32,8 +32,11 @@ true = true                                  \
     .rdd.keyBy(lambda x: (x.shop, x.item))   \
     .groupByKey()                            \
     .mapValues(lambda x: [z.target for z in list(x)[:28]])
+true = dict(true.collect())
+gprint(true)
+gprint('======================================================================')
 
-gprint(true.collect())
+gprint(pred.collect())
 
 # print('======================================================================')
 # print('\n'*10)
