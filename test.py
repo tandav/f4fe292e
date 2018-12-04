@@ -25,12 +25,13 @@ true_table = sys.argv[2]
 spark = SparkSession.builder.getOrCreate()
 pred = spark.read.parquet(pred_table)
 pred = pred \
-    .rdd.keyBy(lambda x: (x.shop, x.item)) \
-    .map(lambda x: x.prediction)           \
+    .map(lambda x: ((x.shop, x.item), x.prediction)) \
     .collect()
+
+    # .rdd.keyBy(lambda x: (x.shop, x.item)) \
+    # .map(lambda x: x[1].prediction)           \
     
 pred = dict(pred)
-
 
 true = spark.read.parquet(true_table)
 true = add_target(add_missing(true))
