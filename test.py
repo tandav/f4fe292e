@@ -23,20 +23,31 @@ pred_table = sys.argv[1]
 true_table = sys.argv[2]
 
 spark = SparkSession.builder.getOrCreate()
-
 pred = spark.read.parquet(pred_table)
+pred = pred \
+    .rdd.keyBy(lambda x: (x.shop, x.item)) \
+    .map(lambda x: x.prediction)           \
+    .collect()
+    
+pred = dict(pred)
+
+
 true = spark.read.parquet(true_table)
 true = add_target(add_missing(true))
+true = true                                                \
+    .rdd.keyBy(lambda x: (x.shop, x.item))                 \
+    .groupByKey()                                          \
+    .mapValues(lambda x: [z.target for z in list(x)[:28]]) \
+    .collect()
+true = dict(true)
 
-true = true                                  \
-    .rdd.keyBy(lambda x: (x.shop, x.item))   \
-    .groupByKey()                            \
-    .mapValues(lambda x: [z.target for z in list(x)[:28]])
-true = dict(true.collect())
-gprint(true)
-gprint('======================================================================')
+for key in pred.keys():
+    print(pred[key], true[key])
 
-gprint(pred.collect())
+# gprint(true)
+# gprint('======================================================================')
+
+# gprint(pred.collect())
 
 # print('======================================================================')
 # print('\n'*10)
