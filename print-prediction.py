@@ -38,13 +38,13 @@ for row in result.collect():
     report += 'sales prediction for next 4 weeks:\n'
 
     for week in range(4):
-        report += 'week' + str(week) + ' '
+        report += 'week ' + str(week) + ' '
         week_pred = row.prediction[week * 7 : (week + 1) * 7]
         week_pred_round = [round(p) for p in week_pred]
         
         for p in week_pred_round:
             report += str(p).rjust(3) + ' '
-        report += 'week sum:' + str(sum(week_pred_round)) + '\n'
+        report += 'week sum: ' + str(sum(week_pred_round)) + '\n'
     report += '\n'
     # rounded = [round(p) for p in row.prediction]
     # rounded_str = []
