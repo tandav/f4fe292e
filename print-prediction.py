@@ -21,17 +21,16 @@ df = spark.read.parquet(args.table +'_prediction')
 
 
 if args.shop and args.item:
-    print('shop + item search')
     result = df.filter((df.shop == args.shop) & (df.item == args.item))
 elif args.shop:
-    print('shop search')
     result = df.filter(df.shop == args.shop)
 elif args.item:
-    print('item search')
     df.filter(df.item == args.item)
 else:
     result = df
 
+print('='*72)
+print('\n'*5)
 for row in result.collect():
     print('shop', row.shop, 'item', row.item)
 
@@ -52,6 +51,8 @@ for row in result.collect():
     # for p in row.prediction:
         # print('{r:3}'.format(r=round(p)), end=' ')
     # print()
+print('\n'*5)
+print('='*72)
 
 
 # TODO
