@@ -40,20 +40,27 @@ mse_mean = 0
 n = 0
 
 for key in pred.keys():
-    print('shop: {shop}, item: {item}'.format(shop=key[0], item=key[1]), end=' ')
+    print('shop {shop}  item {item}   '.format(shop=key[0], item=key[1]), end=' ')
     p = pred[key]
     t = true[key]
     mae = mean_absolute_error(p, t)
     mse = mean_squared_error (p, t)
-    print('MAE:', mae, 'MSE:', mse)
     mae_mean += mae
     mse_mean += mse
     n += 1
 
+    mae = '{mae:6.2f}'.format(mae=mae)
+    mse = '{mse:6.2f}'.format(mse=mse)
+
+    print(' MAE:', mae, '   MSE: ', mse)
+
+
 mae_mean /= n
 mse_mean /= n
-
-print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
+mae_mean = '{mae_mean:5.2f}'.format(mae_mean=mae_mean)
+mse_mean = '{mse_mean:6.2f}'.format(mse_mean=mse_mean)
+print('-'*47)
+print('                  mean: ', mae_mean, '  mean: ', mse_mean)
 
 
 
