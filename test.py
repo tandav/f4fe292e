@@ -7,30 +7,9 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.getOrCreate()
-features = spark.read.parquet('features')
-
-import pickle
-with open('models.pickle', 'rb') as handle:
-    models = pickle.load(handle)
+# features = spark.read.parquet('features')
 
 
-# days = 10
-# days = 1056
-days = 256
-
-date_range = pd.date_range(start='2015-03-01', periods=days, freq='D')
-split_date_pandas = date_range[-56]
-split_date = datetime.date(
-    year  = split_date_pandas.year,
-    month = split_date_pandas.month,
-    day   = split_date_pandas.day
-)
-split_date2_pandas = date_range[-28]
-split_date2 = datetime.date(
-    year  = split_date2_pandas.year,
-    month = split_date2_pandas.month,
-    day   = split_date2_pandas.day
-)
 
 # ======================================================================
 

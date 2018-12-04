@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('table' , type=str                )
 parser.add_argument('--shop', type=int, required=False)
 parser.add_argument('--item', type=int, required=False)
+parser.add_argument('--file', type=str, required=False)
 args = parser.parse_args()
 
 print(args)
@@ -49,8 +50,15 @@ for row in result.collect():
 report += '\n'*5
 report += '='*72
 
+
 def gprint(*args):
     print('\033[32;1m', end='') # GREEN
     print(*args, end='\033[0m\n')
 
 gprint(report)
+
+
+if args.file:
+    with open(args.file, 'w') as f:
+        f.write(report)
+
