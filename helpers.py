@@ -36,6 +36,7 @@ def make_features(df):
             sale=x[1])
         )                                                \
         .sortBy(lambda x: x.date)                        \
+        .map(lambda x: (x.date, x.shop, x.item, x.sale)) \
         .toDF(schema)
 
     # .map(lambda x: (x[0][0], x[0][1], x[0][2], x[1]))    \

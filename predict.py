@@ -9,6 +9,7 @@ from helpers import make_features, make_target
 
 # train_data = spark.sql('select * from sales')
 train_table = sys.argv[1]
+# train_table = 'sales'
 train_data = spark.read.parquet(train_table)
 
 # ======================================================================
@@ -19,9 +20,9 @@ train_data_features_target = make_target  (train_data_features)
 # ======================================================================
 
 def fit_predict(group_iterator):
-    X_train       = []
-    y_train       = []
-    X_predict     = []
+    X_train   = []
+    y_train   = []
+    X_predict = []
 
     for row in group_iterator:
         if row.target is not None:

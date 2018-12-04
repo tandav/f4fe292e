@@ -60,6 +60,7 @@ schema = StructType([
 start = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d').date()
 # start = datetime.date(year=2015, month=3, day=21)
 days = int(sys.argv[2])
+# days = 1000
 date_range = [start + datetime.timedelta(days=x) for x in range(days)]
 
 sales_data = []
@@ -71,9 +72,9 @@ for date in date_range:
             amp   = sales_amp_phase[(shop, item, 'amp')]
             phase = sales_amp_phase[(shop, item, 'phase')]
             sale  = random_time_series(date, amp, phase)
-            # if sale > 0:
-            #     sales_data.append([date, shop, item, sale])
-            sales_data.append([date, shop, item, sale])
+            if sale > 0:
+                sales_data.append([date, shop, item, sale])
+            # sales_data.append([date, shop, item, sale])
 
 sales = spark.createDataFrame(data = sales_data, schema = schema)
 table_name = sys.argv[3]
