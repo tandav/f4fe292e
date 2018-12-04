@@ -5,7 +5,7 @@ from pyspark.sql.types import *
 import sys
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
-from helpers import make_features, make_target
+from helpers import add_features, add_target
 
 # train_data = spark.sql('select * from sales')
 train_table = sys.argv[1]
@@ -14,8 +14,8 @@ train_data = spark.read.parquet(train_table)
 
 # ======================================================================
 
-train_data_features        = make_features(train_data)
-train_data_features_target = make_target  (train_data_features)
+train_data_features        = add_features(train_data)
+train_data_features_target = add_target  (train_data_features)
 
 # ======================================================================
 

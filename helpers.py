@@ -5,10 +5,10 @@ from pyspark.sql import Row
 from pyspark.sql.types import *
 
 
-def make_features(df):
-
-    # ==================== add missing days with 0 sales =====================
-    
+def add_missing(df):
+    '''
+    add missing days with 0 sales
+    '''
     schema = StructType([
         StructField(name = 'date', dataType = DateType()   , nullable=False),
         StructField(name = 'shop', dataType = LongType()   , nullable=False),
@@ -22,7 +22,7 @@ def make_features(df):
 
     df_keyed = df.rdd.map(lambda x: ((x.date, x.shop, x.item), x.sale))
 
-    features = dates_unique                              \
+    return dates_unique                                  \
         .cartesian( 
             shops_unique.cartesian(items_unique)
         )                                                \
@@ -39,7 +39,10 @@ def make_features(df):
         .map(lambda x: (x.date, x.shop, x.item, x.sale)) \
         .toDF(schema)
 
-    # .map(lambda x: (x[0][0], x[0][1], x[0][2], x[1]))    \
+
+def add_features(df):
+
+    features = add_missing(df)
     
     # ======================= add cumulative features ========================
 
@@ -136,6 +139,6 @@ def make_features(df):
     return features
 
 
-def make_target(df):
+def add_target(df):
     target_win = Window.partitionBy('shop', 'item').orderBy('date')
     return df.withColumn('target', F.lag('sale', -28).over(target_win)) # target is sales in 28 day in the future
