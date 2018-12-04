@@ -33,7 +33,7 @@ else:
     result = df
 
 for row in result.collect():
-    print('shop', row.shop, 'item', item)
+    print('shop', row.shop, 'item', row.item)
 
     print('sales prediction for next 4 weeks:')
 
