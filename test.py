@@ -59,7 +59,7 @@ mae_mean /= n
 mse_mean /= n
 mae_mean = '{mae_mean:5.2f}'.format(mae_mean=mae_mean)
 mse_mean = '{mse_mean:6.2f}'.format(mse_mean=mse_mean)
-print('-'*47)
+print('-'*46)
 print('                  mean: ', mae_mean, '  mean: ', mse_mean)
 
 

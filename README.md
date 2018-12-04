@@ -54,4 +54,21 @@ spark-submit generate-data.py '2017-12-15' 56 sales_true
 spark-submit test.py sales_prediction sales_true
 ```
 
-пример результатов тестирования
+пример результатов тестирования:
+
+```
+shop 0  item 1     MAE:   8.90    MSE:  105.28
+shop 1  item 2     MAE:   8.80    MSE:  105.32
+shop 1  item 3     MAE:   1.09    MSE:    1.60
+shop 0  item 3     MAE:   5.01    MSE:   33.36
+shop 1  item 1     MAE:   0.00    MSE:    0.00
+shop 2  item 0     MAE:   1.14    MSE:    1.69
+shop 0  item 0     MAE:   1.95    MSE:    5.22
+shop 2  item 3     MAE:   9.74    MSE:  122.64
+shop 2  item 1     MAE:   2.18    MSE:    6.29
+shop 2  item 2     MAE:  11.02    MSE:  151.59
+shop 1  item 0     MAE:   7.60    MSE:   78.29
+shop 0  item 2     MAE:   9.37    MSE:  111.57
+----------------------------------------------
+                  mean:   5.57   mean:   60.24
+```
