@@ -1,5 +1,4 @@
 import datetime
-from pyspark.sql import Window
 from sklearn.linear_model import LinearRegression
 from pyspark.sql.types import *
 import sys
@@ -9,7 +8,6 @@ from helpers import add_features, add_target
 
 # train_data = spark.sql('select * from sales')
 train_table = sys.argv[1]
-# train_table = 'sales'
 train_data = spark.read.parquet(train_table)
 
 # ======================================================================
@@ -32,7 +30,6 @@ def fit_predict(group_iterator):
             X_predict.append(row.features.toArray())
     
     return LinearRegression().fit(X_train, y_train).predict(X_predict).tolist()
-
 
 schema = StructType([
     StructField(name = 'shop'      , dataType = LongType()                                             , nullable=False),

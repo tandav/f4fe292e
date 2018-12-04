@@ -3,7 +3,6 @@ import sys
 from pyspark.sql import SparkSession
 import sys
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('table' , type=str                )
 parser.add_argument('--shop', type=int, required=False)
@@ -11,15 +10,12 @@ parser.add_argument('--item', type=int, required=False)
 parser.add_argument('--file', type=str, required=False)
 args = parser.parse_args()
 
-
-
 if not args.table:
     print('error: table is not specified')
     sys.exit(1)
 
 spark = SparkSession.builder.getOrCreate()
 df = spark.read.parquet(args.table +'_prediction')
-
 
 if args.shop and args.item:
     result = df.filter((df.shop == args.shop) & (df.item == args.item))
@@ -44,7 +40,6 @@ for row in result.collect():
             report += str(p).rjust(3) + ' '
         report += '    week sum: ' + str(sum(week_pred_round)) + '\n'
     report += '\n'
-
 
 def gprint(*args):
     print('\033[32;1m', end='') # GREEN
