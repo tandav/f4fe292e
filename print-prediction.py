@@ -33,7 +33,10 @@ else:
     result = df
 
 for row in result.collect():
-    print(row.shop, row.item, row.prediction)
+    print(row.shop, row.item, end=' ')
+    for p in row.prediction:
+        print('{p:3.3f}'.format(p=p), end=' ')
+    print('\n')
 
 
 # TODO
