@@ -45,8 +45,7 @@ for row in result.collect():
         for p in week_pred_round:
             print(str(p).rjust(3), end=' ')
         print('week sum:', sum(week_pred_round))
-
-
+    print()
     # rounded = [round(p) for p in row.prediction]
     # rounded_str = []
     # print(row.shop, row.item, end=' ')
