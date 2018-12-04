@@ -42,6 +42,9 @@ true = true                                                \
     .collect()
 true = dict(true)
 
+gprint(pred.keys())
+gprint(true.keys())
+
 for key in pred.keys():
     print(pred[key], true[key])
 
