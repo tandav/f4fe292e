@@ -24,7 +24,7 @@ true_table = sys.argv[2]
 
 spark = SparkSession.builder.getOrCreate()
 pred = spark.read.parquet(pred_table)
-pred = pred \
+pred = pred.rdd \
     .map(lambda x: ((x.shop, x.item), x.prediction)) \
     .collect()
 
