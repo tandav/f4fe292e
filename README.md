@@ -35,7 +35,7 @@ spark-submit print-prediction.py sales --shop=0          # results for shop 0
 spark-submit print-prediction.py sales --item=2          # results for item 2
 spark-submit print-prediction.py sales --file=report.txt # save report to file
 ```
-[пример вывода](prediction.txt)
+[пример вывода](report.txt)
 
 ---
 
