@@ -39,7 +39,6 @@ n = 0
 
 for key in pred.keys():
     print('shop: {shop}, item: {item}'.format(shop=key[0], item=key[1]), end=' ')
-    print('shop:', key[0], 'item:' key[1], ':')
     p = pred[key]
     t = true[key]
     mae = mean_absolute_error(p, t)
