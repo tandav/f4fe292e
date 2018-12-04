@@ -31,9 +31,6 @@ else:
     result = df
 
 report  = ''
-report += '='*72
-report += '\n'*5
-
 for row in result.collect():
     report += 'shop ' + str(row.shop) + ' item ' + str(row.item) + '\n'
     report += 'sales prediction for next 4 weeks:\n'
@@ -47,8 +44,6 @@ for row in result.collect():
             report += str(p).rjust(3) + ' '
         report += 'week sum: ' + str(sum(week_pred_round)) + '\n'
     report += '\n'
-report += '\n'*5
-report += '='*72
 
 
 def gprint(*args):
@@ -57,8 +52,6 @@ def gprint(*args):
 
 gprint(report)
 
-
 if args.file:
     with open(args.file, 'w') as f:
         f.write(report)
-
