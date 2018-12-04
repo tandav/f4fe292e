@@ -33,7 +33,7 @@ true = true                                  \
     .groupByKey()                            \
     .mapValues(lambda x: [z.target for z in list(x)])
 
-gprint(true.collect)
+gprint(true.collect())
 
 # print('======================================================================')
 # print('\n'*10)
