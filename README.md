@@ -23,7 +23,7 @@ spark-submit predict.py sales
 
 ---
 
-просмотреть результаты предсказания для таблицы sales  
+просмотреть результаты предсказания для таблицы sales ([пример вывода](prediction.txt))
 
 ```sh
 spark-submit print-prediction.py sales                   # all results
