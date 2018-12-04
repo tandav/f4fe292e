@@ -2,6 +2,8 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import Window
 from pyspark.sql import functions as F
 from pyspark.sql import Row
+from pyspark.sql.types import *
+
 
 def make_features(df):
 
