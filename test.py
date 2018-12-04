@@ -28,20 +28,27 @@ pred = spark.read.parquet(pred_table)
 true = spark.read.parquet(true_table)
 true = add_target(add_missing(true))
 
-print('======================================================================')
-print('\n'*10)
+true = true                                  \
+    .rdd.keyBy(lambda x: (x.shop, x.item))   \
+    .groupByKey()                            \
+    .mapValues(lambda x: [z.target for z in list(x)])
 
-mae_mean = 0
-mse_mean = 0
-n = 0
+gprint(true.collect)
+
+# print('======================================================================')
+# print('\n'*10)
+
+# mae_mean = 0
+# mse_mean = 0
+# n = 0
 
 
 
-for p, t in zip(pred.collect(), true.collect()):
-    print(p)
-    print(t)
-#     mae = mean_absolute_error(p., p['sales_true'])
-#     mse = mean_squared_error (p['sales_pred'], p['sales_true'])
+# for p, t in zip(pred.collect(), true.collect()):
+#     print(p)
+#     print(t)
+#     mae = mean_absolute_error(p.prediction, t.target)
+#     mse = mean_squared_error (p.prediction, t.target)
 #     print(key, 'MAE:', mae, 'MSE:', mse)
 #     mae_mean += mae
 #     mse_mean += mse
