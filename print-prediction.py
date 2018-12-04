@@ -36,7 +36,7 @@ for row in result.collect():
     print(row.shop, row.item, end=' ')
     for p in row.prediction:
         print('{r:4}'.format(r=round(p)), end=' ')
-    print('\n')
+    # print('\n')
 
 
 # TODO
