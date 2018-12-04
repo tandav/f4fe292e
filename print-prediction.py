@@ -29,11 +29,10 @@ elif args.item:
 else:
     result = df
 
-print('='*72)
-print('\n'*5)
+# print('='*72)
+# print('\n'*5)
 for row in result.collect():
     print('shop', row.shop, 'item', row.item)
-
     print('sales prediction for next 4 weeks:')
 
     for week in range(4):
@@ -51,8 +50,8 @@ for row in result.collect():
     # for p in row.prediction:
         # print('{r:3}'.format(r=round(p)), end=' ')
     # print()
-print('\n'*5)
-print('='*72)
+# print('\n'*5)
+# print('='*72)
 
 
 # TODO
