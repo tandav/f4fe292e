@@ -92,3 +92,24 @@ shop 0  item 2     MAE:   9.37    MSE:  111.57
 ----------------------------------------------
                   mean:   5.57   mean:   60.24
 ```
+
+---
+
+### возможные улучшения
+1. использование partitions, buckets в hive  
+пример хранения таблицы `sales` в hive:  
+
+```sql
+create table if not exists sales ( 
+    date date, 
+    item bigint, 
+    sales int
+)
+partitioned by (shop bigint) 
+clustered by (date) into 156 buckets
+stored as parquet
+```
+партиции по магазинам, потому что число магазинов меняется редко
+
+2. Использовать различные способы для удаления тренда из временных рядов. Это улучшит предсказания.
+

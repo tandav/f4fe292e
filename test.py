@@ -10,10 +10,6 @@ if len(sys.argv) < 3:
     print('pass prediction table and true table')
     sys.exit(1)
 
-def gprint(*args):
-    print('\033[32;1m', end='') # GREEN
-    print(*args, end='\033[0m\n')
-
 pred_table = sys.argv[1]
 true_table = sys.argv[2]
 
@@ -31,7 +27,6 @@ true = true                                                \
     .mapValues(lambda x: [z.target for z in list(x)[:28]]) \
     .collect()
 true = dict(true)
-
 
 mae_mean = 0
 mse_mean = 0
@@ -59,43 +54,3 @@ mae_mean = '{mae_mean:5.2f}'.format(mae_mean=mae_mean)
 mse_mean = '{mse_mean:6.2f}'.format(mse_mean=mse_mean)
 print('-'*46)
 print('                  mean: ', mae_mean, '  mean: ', mse_mean)
-
-
-
-
-# print('======================================================================')
-
-# print('\n'*10)
-# print('======================================================================')
-
-
-
-
-
-
-# # ======================================================================
-
-# features_test = features.filter((F.col('date') >= split_date) & (F.col('date') < split_date2))
-
-# # ======================================================================
-
-# models_broadcasted = spark.sparkContext.broadcast(models)
-
-# def test(group_iterator):
-#     features   = []
-#     sales_pred = []
-#     sales_true = []
-
-#     first = True
-#     for row in group_iterator:
-#         if first:
-#             key = (row.shop, row.item)
-#             first = False
-#         features.append(row.features.toArray())
-#         sales_true.append(row.target)
-#     sales_pred = models_broadcasted.value[key].predict(features)
-#     sales_true = np.array(sales_true)
-#     return {'sales_pred': sales_pred, 'sales_true': sales_true}
-
-# pred_true = features_test.rdd.keyBy(lambda x: (x.shop, x.item)).groupByKey().mapValues(test).collect()
-
