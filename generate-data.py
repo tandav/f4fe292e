@@ -90,5 +90,5 @@ for date in date_range:
 sales = spark.createDataFrame(data = sales_data, schema = schema)
 table_name = sys.argv[3]
 sales.write.save(table_name, format='parquet', mode='overwrite')
-# sales.write.saveAsTable('sales', mode='overwrite')
+sales.write.saveAsTable('sales', mode='overwrite')
 
