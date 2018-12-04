@@ -63,7 +63,7 @@ spark-submit print-prediction.py sales --file=report.txt # save report to file
 (будет использоваться тот же генератор, поэтому ряды продолжаться)  
 
 ```sh
-spark-submit generate-data.py '2017-12-15' 56 --shops=3 --items=4 sales_true
+spark-submit generate-data.py '2017-12-15' 56 --shops=3 --items=4 --use_last_generator sales_true 
 ```
 
 28 + 28 = 56  
