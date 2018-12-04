@@ -35,7 +35,7 @@ else:
 for row in result.collect():
     print(row.shop, row.item, end=' ')
     for p in row.prediction:
-        print('{p:3.3f}'.format(p=p), end=' ')
+        print('{r:4}'.format(r=round(z)))
     print('\n')
 
 
