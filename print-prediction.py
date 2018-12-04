@@ -44,7 +44,7 @@ for row in result.collect():
         
         for p in week_pred_round:
             report += str(p).rjust(3) + ' '
-        report += 'week sum:' + str(sum(week_pred_round))
+        report += 'week sum:' + str(sum(week_pred_round)) + '\n'
     report += '\n'
     # rounded = [round(p) for p in row.prediction]
     # rounded_str = []
