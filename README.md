@@ -53,3 +53,5 @@ spark-submit generate-data.py '2017-12-15' 56 sales_true
 ```sh
 spark-submit test.py sales_prediction sales_true
 ```
+
+пример результатов тестирования

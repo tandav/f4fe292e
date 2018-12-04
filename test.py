@@ -1,15 +1,10 @@
-import pandas as pd
 import numpy as np
-from pyspark.sql.types import *
-import datetime
-from pyspark.sql import functions as F
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from pyspark.sql import SparkSession
 import sys
 from helpers import add_missing, add_target
 
 spark = SparkSession.builder.getOrCreate()
-# features = spark.read.parquet('features')
 
 if len(sys.argv) < 3:
     print('pass prediction table and true table')
@@ -22,15 +17,10 @@ def gprint(*args):
 pred_table = sys.argv[1]
 true_table = sys.argv[2]
 
-spark = SparkSession.builder.getOrCreate()
 pred = spark.read.parquet(pred_table)
 pred = pred.rdd \
     .map(lambda x: ((x.shop, x.item), x.prediction)) \
     .collect()
-
-    # .rdd.keyBy(lambda x: (x.shop, x.item)) \
-    # .map(lambda x: x[1].prediction)           \
-    
 pred = dict(pred)
 
 true = spark.read.parquet(true_table)
@@ -42,45 +32,32 @@ true = true                                                \
     .collect()
 true = dict(true)
 
-gprint(pred.keys())
-gprint(true.keys())
+
+mae_mean = 0
+mse_mean = 0
+n = 0
 
 for key in pred.keys():
-    print(pred[key], true[key])
+    print('shop: {shop}, item: {item}'.format(shop=key[0], item=key[1]), end=' ')
+    print('shop:', key[0], 'item:' key[1], ':')
+    p = pred[key]
+    t = true[key]
+    mae = mean_absolute_error(p, t)
+    mse = mean_squared_error (p, t)
+    print('MAE:', mae, 'MSE:', mse)
+    mae_mean += mae
+    mse_mean += mse
+    n += 1
 
-# gprint(true)
-# gprint('======================================================================')
+mae_mean /= n
+mse_mean /= n
 
-# gprint(pred.collect())
-
-# print('======================================================================')
-# print('\n'*10)
-
-# mae_mean = 0
-# mse_mean = 0
-# n = 0
-
-
-
-# for p, t in zip(pred.collect(), true.collect()):
-#     print(p)
-#     print(t)
-#     mae = mean_absolute_error(p.prediction, t.target)
-#     mse = mean_squared_error (p.prediction, t.target)
-#     print(key, 'MAE:', mae, 'MSE:', mse)
-#     mae_mean += mae
-#     mse_mean += mse
-#     n += 1
-
-# mae_mean /= n
-# mse_mean /= n
-
+print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
 
 
 
 
 # print('======================================================================')
-# print('MAE_mean:', mae_mean, 'MSE_mean:', mse_mean)
 
 # print('\n'*10)
 # print('======================================================================')
