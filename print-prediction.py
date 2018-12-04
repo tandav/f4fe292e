@@ -34,7 +34,7 @@ report += '='*72
 report += '\n'*5
 
 for row in result.collect():
-    report += 'shop' + str(row.shop) + 'item' + str(row.item) + '\n'
+    report += 'shop ' + str(row.shop) + ' item ' + str(row.item) + '\n'
     report += 'sales prediction for next 4 weeks:\n'
 
     for week in range(4):
