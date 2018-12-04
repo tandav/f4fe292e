@@ -3,7 +3,7 @@ import datetime
 from pyspark.sql import SparkSession
 import sys
 
-# ==========================================    ============================
+# ======================================================================
 spark = SparkSession.builder.getOrCreate()
 # ======================================================================
 
@@ -57,9 +57,8 @@ schema = StructType([
     StructField(name = 'sale', dataType = IntegerType(), nullable=False),
 ])
 
-
 start = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d').date()
-# start = datetime.date(year=2015, month=3, day=1)
+# start = datetime.date(year=2015, month=3, day=21)
 days = int(sys.argv[2])
 date_range = [start + datetime.timedelta(days=x) for x in range(days)]
 
