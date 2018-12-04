@@ -11,7 +11,7 @@ parser.add_argument('--item', type=int, required=False)
 parser.add_argument('--file', type=str, required=False)
 args = parser.parse_args()
 
-print(args)
+
 
 if not args.table:
     print('error: table is not specified')

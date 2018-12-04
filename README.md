@@ -1,9 +1,12 @@
-сгенерировать рандомные данные  
+сгенерировать случайные данные  
 1000 дней продаж начиная с `2015-03-21`  
+количество магазинов 3  
+количество продуктов 4  
+
 сохранить результат в таблицу `sales`
 
 ```sh
-spark-submit generate-data.py '2015-03-21' 1000 sales
+spark-submit generate-data.py '2015-03-21' 1000 --n_shops=3 --n_items=4 sales
 ```
 
 > примечание: последняя дата будет `2017-12-14`  
@@ -39,9 +42,10 @@ spark-submit print-prediction.py sales --file=report.txt # save report to file
 ### тестирование модели
 
 сгенерируем данных еще на 56 дней в будущее по отноошению к прошлой таблице и сохраним в таблицу `sales_true`  
+(будет использоваться тот же генератор, поэтому ряды продолжаться)  
 
 ```sh
-spark-submit generate-data.py '2017-12-15' 56 sales_true
+spark-submit generate-data.py '2017-12-15' 56 --n_shops=3 --n_items=4 sales_true
 ```
 
 28 + 28 = 56  

@@ -32,8 +32,6 @@ true = true                                                \
     .collect()
 true = dict(true)
 
-print(pred)
-print(true)
 
 mae_mean = 0
 mse_mean = 0

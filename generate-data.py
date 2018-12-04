@@ -2,6 +2,17 @@ from pyspark.sql.types import *
 import datetime
 from pyspark.sql import SparkSession
 import sys
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('start', type=str                   )
+parser.add_argument('days' , type=int                   )
+parser.add_argument('--n_shops', type=int, required=True)
+parser.add_argument('--n_items', type=int, required=True)
+parser.add_argument('table'    , type=str               )
+args = parser.parse_args()
+
+
 
 # ======================================================================
 spark = SparkSession.builder.getOrCreate()
@@ -18,8 +29,8 @@ def random_time_series(date, amp, phase):
 # ======================================================================
 
 # very small for developing
-shops = [0, 1, 2]
-items = [0, 1, 2, 3]
+shops = list(range(args.n_shops))
+items = list(range(args.n_items))
 
 # ======================================================================
 
