@@ -31,7 +31,7 @@ true = add_target(add_missing(true))
 true = true                                  \
     .rdd.keyBy(lambda x: (x.shop, x.item))   \
     .groupByKey()                            \
-    .mapValues(lambda x: [z.target for z in list(x)])
+    .mapValues(lambda x: [z.target for z in list(x)[:28]])
 
 gprint(true.collect())
 
