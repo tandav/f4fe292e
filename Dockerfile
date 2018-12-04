@@ -76,4 +76,5 @@ RUN pip install pandas
 RUN pip install matplotlib
 RUN pip install sklearn
 
-RUN curl -O https://gist.githubusercontent.com/tandav/f02806847b28ae1fcc4d07b25705cfbe/raw/bd5c4544f85f11213ce8df151b0d15fa1164275b/sales.py
+COPY ./* $SPARK_HOME/
+
