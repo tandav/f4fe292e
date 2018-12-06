@@ -61,7 +61,7 @@ else:
     sales_amp_phase = {}
     for shop in shops:
         for item in items:
-            sales_amp_phase[(shop, item, 'amp')]   = expovariate(10)
+            sales_amp_phase[(shop, item, 'amp')]   = expovariate(0.1)
             sales_amp_phase[(shop, item, 'phase')] = random() * 40
 
 with open('generator.pickle', 'wb') as handle:
