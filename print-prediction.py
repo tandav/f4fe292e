@@ -22,7 +22,7 @@ if args.shop and args.item:
 elif args.shop:
     result = df.filter(df.shop == args.shop)
 elif args.item:
-    df.filter(df.item == args.item)
+    result = df.filter(df.item == args.item)
 else:
     result = df
 
